@@ -1,7 +1,7 @@
 #include <sys/mman.h>
 #include <iostream>
 
-#define CHUNK_SIZE 128
+#define CHUNK_SIZE 64
 
 class Mem 
 {
@@ -9,11 +9,6 @@ public:
     char mem[CHUNK_SIZE];
     uint8_t offset;
     Mem* next;
-
-    Mem() 
-    {
-        this->offset = 0;
-    }
 };
 
 
@@ -59,7 +54,7 @@ public:
             std::cerr << "Heap is filled. Can't store any more data\n";
         } else if (alloc_size > CHUNK_SIZE) 
         {
-            std::cerr << "Cannot alloc more than  bytes for one ptr.\n";
+            std::cerr << "Cannot alloc more than " << CHUNK_SIZE << " bytes for one chunk.";
         } else 
         {
             ALLOC_T* ptr = (ALLOC_T*)&this->es->mem;
@@ -82,7 +77,7 @@ public:
     }
 
     void mem_free(void* ptr) {
-        //Unimplemented for now
+        *(int*)ptr = 0;
     }
 
     ~Heap() {
